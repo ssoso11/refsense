@@ -162,6 +162,7 @@ export type DesignReference = {
   image_url: string
   created_at: string
   brand: string | null
+  industry: string | null
   headline: string | null
   benefit: string | null
   cta: string | null
@@ -175,6 +176,8 @@ export type DesignReference = {
 
 /** 사람이 직접 입력하는 값들. 폼 상태이자 저장 페이로드의 원본입니다. */
 export type ReferenceFormValues = {
+  brand: string
+  industry: string
   headline: string
   benefit: string
   cta: string
@@ -204,6 +207,8 @@ export function isMetadataComplete(ref: DesignReference): boolean {
 export function toFormValues(ref: DesignReference): ReferenceFormValues {
   const meta = ref.category_metadata
   return {
+    brand: ref.brand ?? '',
+    industry: ref.industry ?? '',
     headline: ref.headline ?? '',
     benefit: ref.benefit ?? '',
     cta: ref.cta ?? '',

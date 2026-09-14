@@ -219,6 +219,20 @@ export function ReferenceDetailModal({ reference, onClose, onSaved }: Props) {
             </div>
 
             <div className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <TextField
+                  label="Brand"
+                  value={values.brand}
+                  onChange={(v) => set('brand', v)}
+                  placeholder="브랜드 / 클라이언트명"
+                />
+                <TextField
+                  label="Industry"
+                  value={values.industry}
+                  onChange={(v) => set('industry', v)}
+                  placeholder="업종명"
+                />
+              </div>
               <TextField
                 label="Headline"
                 value={values.headline}

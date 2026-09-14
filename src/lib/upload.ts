@@ -9,7 +9,7 @@ import {
 } from '@/lib/types'
 
 const SELECT_COLUMNS =
-  'id, image_url, created_at, brand, headline, benefit, cta, visual_focus, layout, copy_density, style, color_tone, category_metadata'
+  'id, image_url, created_at, brand, industry, headline, benefit, cta, visual_focus, layout, copy_density, style, color_tone, category_metadata'
 
 /** 빈 문자열은 저장하지 않고 null 로 눕힙니다. */
 function orNull(value: string): string | null {
@@ -102,6 +102,8 @@ export async function updateReference(
   const { data, error } = await supabase
     .from('design_references')
     .update({
+      brand: orNull(values.brand),
+      industry: orNull(values.industry),
       headline: orNull(values.headline),
       benefit: orNull(values.benefit),
       cta: orNull(values.cta),
