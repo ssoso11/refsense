@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase/client'
 import {
-  EMPTY_DA_METADATA,
+  EMPTY_PP_METADATA,
   PHASE1_CATEGORY,
   PHASE1_SOURCE_TYPE,
   REFERENCES_BUCKET,
@@ -53,7 +53,7 @@ export async function uploadReference(file: File): Promise<DesignReference> {
       category: PHASE1_CATEGORY,
       source_type: PHASE1_SOURCE_TYPE,
       image_url: publicUrl,
-      category_metadata: EMPTY_DA_METADATA,
+      category_metadata: EMPTY_PP_METADATA,
     })
     .select(SELECT_COLUMNS)
     .single()
@@ -92,7 +92,8 @@ export async function fetchReferences(limit = 60): Promise<DesignReference[]> {
  * 사람이 입력한 메타데이터를 한 행에 저장합니다.
  *
  * category_metadata 는 부분 갱신이 아니라 5개 키를 모두 담아 통째로 덮어씁니다.
- * chk_da_metadata_shape 가 빈 객체를 거부하기 때문에, 전부 비워도 키는 남깁니다.
+ * promotion_page 에는 DA 와 달리 형태를 강제하는 CHECK 제약이 없으므로,
+ * 키를 빠짐없이 채우는 책임은 전적으로 이 함수에 있습니다.
  */
 export async function updateReference(
   id: string,
@@ -110,12 +111,12 @@ export async function updateReference(
       style: values.style.length > 0 ? values.style : null,
       color_tone: values.color_tone.length > 0 ? values.color_tone : null,
       category_metadata: {
-        ...EMPTY_DA_METADATA,
-        ad_format: orNull(values.ad_format),
-        ad_size: orNull(values.ad_size),
-        platform: orNull(values.platform),
+        ...EMPTY_PP_METADATA,
+        page_type: orNull(values.page_type),
+        structure: orNull(values.structure),
+        video_used: orNull(values.video_used),
+        cta_style: orNull(values.cta_style),
         funnel_stage: orNull(values.funnel_stage),
-        animation: orNull(values.animation),
       },
     })
     .eq('id', id)

@@ -77,11 +77,11 @@ export default function UploadPage() {
     <main className="mx-auto max-w-5xl px-6 py-10">
       <header className="mb-8">
         <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
-          DA 레퍼런스 업로드
+          Promotion Page 레퍼런스 업로드
         </h1>
         <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-          Digital Marketing · 내부 레퍼런스. 업로드하면 메타데이터는 비어 있는
-          상태로 저장되고, 이후 AI 분석 단계에서 채워집니다.
+          Promotion Page · 내부 레퍼런스. 업로드하면 메타데이터는 비어 있는
+          상태로 저장되고, 카드를 클릭해 직접 입력할 수 있습니다.
         </p>
       </header>
 

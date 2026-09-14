@@ -3,14 +3,15 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import {
-  AD_FORMAT_OPTIONS,
-  ANIMATION_OPTIONS,
   COLOR_TONE_OPTIONS,
   COPY_DENSITY_OPTIONS,
+  CTA_STYLE_OPTIONS,
   FUNNEL_STAGE_OPTIONS,
   LAYOUT_OPTIONS,
-  PLATFORM_OPTIONS,
+  PAGE_TYPE_OPTIONS,
+  STRUCTURE_OPTIONS,
   STYLE_OPTIONS,
+  VIDEO_USED_OPTIONS,
   VISUAL_FOCUS_OPTIONS,
   toFormValues,
   type DesignReference,
@@ -210,7 +211,7 @@ export function ReferenceDetailModal({ reference, onClose, onSaved }: Props) {
             <div className="relative aspect-square w-full overflow-hidden rounded-lg border border-neutral-200 bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900">
               <Image
                 src={reference.image_url}
-                alt="선택한 DA 레퍼런스"
+                alt="선택한 Promotion Page 레퍼런스"
                 fill
                 sizes="200px"
                 className="object-contain"
@@ -277,38 +278,38 @@ export function ReferenceDetailModal({ reference, onClose, onSaved }: Props) {
 
           <fieldset className="mt-7 border-t border-neutral-200 pt-5 dark:border-neutral-800">
             <legend className="px-0 text-xs font-semibold text-neutral-900 dark:text-neutral-100">
-              DA 상세 (category_metadata)
+              Promotion Page 상세 (category_metadata)
             </legend>
             <div className="mt-3 grid gap-4 sm:grid-cols-3">
               <SelectField
-                label="Ad Format"
-                value={values.ad_format}
-                options={AD_FORMAT_OPTIONS}
-                onChange={(v) => set('ad_format', v)}
-              />
-              <TextField
-                label="Ad Size"
-                value={values.ad_size}
-                onChange={(v) => set('ad_size', v)}
-                placeholder="예: 728x90"
+                label="Page Type"
+                value={values.page_type}
+                options={PAGE_TYPE_OPTIONS}
+                onChange={(v) => set('page_type', v)}
               />
               <SelectField
-                label="Platform"
-                value={values.platform}
-                options={PLATFORM_OPTIONS}
-                onChange={(v) => set('platform', v)}
+                label="Structure"
+                value={values.structure}
+                options={STRUCTURE_OPTIONS}
+                onChange={(v) => set('structure', v)}
+              />
+              <SelectField
+                label="Video Used"
+                value={values.video_used}
+                options={VIDEO_USED_OPTIONS}
+                onChange={(v) => set('video_used', v)}
+              />
+              <SelectField
+                label="CTA Style"
+                value={values.cta_style}
+                options={CTA_STYLE_OPTIONS}
+                onChange={(v) => set('cta_style', v)}
               />
               <SelectField
                 label="Funnel Stage"
                 value={values.funnel_stage}
                 options={FUNNEL_STAGE_OPTIONS}
                 onChange={(v) => set('funnel_stage', v)}
-              />
-              <SelectField
-                label="Animation"
-                value={values.animation}
-                options={ANIMATION_OPTIONS}
-                onChange={(v) => set('animation', v)}
               />
             </div>
           </fieldset>
