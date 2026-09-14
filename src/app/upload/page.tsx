@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { ReferenceDetailModal } from '@/components/reference-detail-modal'
 import { ReferenceGrid } from '@/components/reference-grid'
 import { UploadDropzone } from '@/components/upload-dropzone'
 import { fetchReferences, uploadReference } from '@/lib/upload'
@@ -11,6 +12,10 @@ export default function UploadPage() {
   const [queue, setQueue] = useState<UploadItem[]>([])
   const [uploading, setUploading] = useState(false)
   const [loadError, setLoadError] = useState<string | null>(null)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+
+  // 저장 후 갱신된 행이 모달에 그대로 반영되도록 id 로 찾아 씁니다.
+  const selected = references.find((r) => r.id === selectedId) ?? null
 
   useEffect(() => {
     fetchReferences()
@@ -117,9 +122,22 @@ export default function UploadPage() {
             {loadError}
           </p>
         ) : (
-          <ReferenceGrid items={references} />
+          <ReferenceGrid items={references} onSelect={(r) => setSelectedId(r.id)} />
         )}
       </section>
+
+      {selected && (
+        <ReferenceDetailModal
+          key={selected.id}
+          reference={selected}
+          onClose={() => setSelectedId(null)}
+          onSaved={(updated) =>
+            setReferences((prev) =>
+              prev.map((r) => (r.id === updated.id ? updated : r)),
+            )
+          }
+        />
+      )}
     </main>
   )
 }

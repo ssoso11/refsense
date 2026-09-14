@@ -5,9 +5,17 @@ import {
   PHASE1_SOURCE_TYPE,
   REFERENCES_BUCKET,
   type DesignReference,
+  type ReferenceFormValues,
 } from '@/lib/types'
 
-const SELECT_COLUMNS = 'id, image_url, created_at, brand, headline'
+const SELECT_COLUMNS =
+  'id, image_url, created_at, brand, headline, benefit, cta, visual_focus, layout, copy_density, style, color_tone, category_metadata'
+
+/** 빈 문자열은 저장하지 않고 null 로 눕힙니다. */
+function orNull(value: string): string | null {
+  const trimmed = value.trim()
+  return trimmed === '' ? null : trimmed
+}
 
 function extensionFor(file: File) {
   const fromName = file.name.split('.').pop()?.toLowerCase()
@@ -78,4 +86,45 @@ export async function fetchReferences(limit = 60): Promise<DesignReference[]> {
 
   if (error) throw new Error(`목록 조회 실패: ${error.message}`)
   return (data ?? []) as DesignReference[]
+}
+
+/**
+ * 사람이 입력한 메타데이터를 한 행에 저장합니다.
+ *
+ * category_metadata 는 부분 갱신이 아니라 5개 키를 모두 담아 통째로 덮어씁니다.
+ * chk_da_metadata_shape 가 빈 객체를 거부하기 때문에, 전부 비워도 키는 남깁니다.
+ */
+export async function updateReference(
+  id: string,
+  values: ReferenceFormValues,
+): Promise<DesignReference> {
+  const { data, error } = await supabase
+    .from('design_references')
+    .update({
+      headline: orNull(values.headline),
+      benefit: orNull(values.benefit),
+      cta: orNull(values.cta),
+      visual_focus: orNull(values.visual_focus),
+      layout: orNull(values.layout),
+      copy_density: orNull(values.copy_density),
+      style: values.style.length > 0 ? values.style : null,
+      color_tone: values.color_tone.length > 0 ? values.color_tone : null,
+      category_metadata: {
+        ...EMPTY_DA_METADATA,
+        ad_format: orNull(values.ad_format),
+        ad_size: orNull(values.ad_size),
+        platform: orNull(values.platform),
+        funnel_stage: orNull(values.funnel_stage),
+        animation: orNull(values.animation),
+      },
+    })
+    .eq('id', id)
+    .select(SELECT_COLUMNS)
+    .single()
+
+  if (error || !data) {
+    throw new Error(`저장 실패: ${error?.message ?? '알 수 없는 오류'}`)
+  }
+
+  return data as DesignReference
 }
