@@ -55,6 +55,10 @@ function UploadPageContent() {
   }, [])
 
   useEffect(() => {
+    // 같은 페이지에서 다른 카드의 '이 스타일로 새로 시작' 을 누르면 템플릿만
+    // 바뀝니다. 이전 템플릿으로 올린 행이 새 값으로 열리지 않게 기록을 비웁니다.
+    setTemplatedIds(new Set())
+
     if (!templateId) {
       setTemplate(null)
       setTemplateSource(null)
@@ -215,7 +219,11 @@ function UploadPageContent() {
             {loadError}
           </p>
         ) : (
-          <ReferenceGrid items={references} onSelect={(r) => setSelectedId(r.id)} />
+          <ReferenceGrid
+            items={references}
+            onSelect={(r) => setSelectedId(r.id)}
+            showTemplateAction
+          />
         )}
       </section>
 
