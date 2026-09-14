@@ -23,6 +23,24 @@ export const DA_CATEGORY = 'digital_marketing'
  *
  * 이 코어 필드들은 카테고리와 무관하게 공통입니다.
  */
+export const INDUSTRY_OPTIONS = [
+  '금융',
+  '게임',
+  '뷰티',
+  '패션',
+  '식품/음료',
+  '가전/생활가전',
+  '이커머스/리테일',
+  'IT/테크',
+  '자동차',
+  '교육',
+  '헬스케어',
+  '여행',
+  '엔터테인먼트',
+  '공공기관',
+  '기타',
+] as const
+
 export const VISUAL_FOCUS_OPTIONS = [
   'Product',
   'Person',

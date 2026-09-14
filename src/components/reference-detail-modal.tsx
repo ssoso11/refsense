@@ -7,6 +7,7 @@ import {
   COPY_DENSITY_OPTIONS,
   CTA_STYLE_OPTIONS,
   FUNNEL_STAGE_OPTIONS,
+  INDUSTRY_OPTIONS,
   LAYOUT_OPTIONS,
   PAGE_TYPE_OPTIONS,
   STRUCTURE_OPTIONS,
@@ -60,6 +61,10 @@ function SelectField({
   options: readonly string[]
   onChange: (v: string) => void
 }) {
+  // 이 컬럼들은 DB 가 값을 검증하지 않아 목록 밖 값이 들어 있을 수 있습니다.
+  // 그대로 두면 select 가 빈 값으로 보이다가 저장 시 지워지므로 선택지로 살려둡니다.
+  const unlisted = value !== '' && !options.includes(value)
+
   return (
     <label className="block">
       <span className={labelClass}>{label}</span>
@@ -69,6 +74,7 @@ function SelectField({
         className={inputClass}
       >
         <option value="">선택 안 함</option>
+        {unlisted && <option value={value}>{value} (목록 외)</option>}
         {options.map((o) => (
           <option key={o} value={o}>
             {o}
@@ -226,11 +232,11 @@ export function ReferenceDetailModal({ reference, onClose, onSaved }: Props) {
                   onChange={(v) => set('brand', v)}
                   placeholder="브랜드 / 클라이언트명"
                 />
-                <TextField
+                <SelectField
                   label="Industry"
                   value={values.industry}
+                  options={INDUSTRY_OPTIONS}
                   onChange={(v) => set('industry', v)}
-                  placeholder="업종명"
                 />
               </div>
               <TextField
