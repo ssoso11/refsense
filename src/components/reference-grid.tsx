@@ -1,12 +1,15 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { isMetadataComplete, type DesignReference } from '@/lib/types'
 
 type Props = {
   items: DesignReference[]
   onSelect: (reference: DesignReference) => void
+  /** 켜면 카드마다 '이 스타일로 새로 시작' 링크가 붙습니다. */
+  showTemplateAction?: boolean
 }
 
-export function ReferenceGrid({ items, onSelect }: Props) {
+export function ReferenceGrid({ items, onSelect, showTemplateAction }: Props) {
   if (items.length === 0) {
     return (
       <p className="rounded-lg border border-neutral-200 px-4 py-10 text-center text-sm text-neutral-500 dark:border-neutral-800 dark:text-neutral-400">
@@ -20,16 +23,20 @@ export function ReferenceGrid({ items, onSelect }: Props) {
       {items.map((item) => {
         const complete = isMetadataComplete(item)
         return (
-          <li key={item.id}>
+          <li
+            key={item.id}
+            className="overflow-hidden rounded-lg border border-neutral-200 transition-colors hover:border-neutral-400 dark:border-neutral-800 dark:hover:border-neutral-600"
+          >
+            {/* 카드 본문과 아래 링크는 형제입니다. 버튼 안에 버튼을 두면 안 됩니다. */}
             <button
               type="button"
               onClick={() => onSelect(item)}
-              className="w-full overflow-hidden rounded-lg border border-neutral-200 text-left transition-colors hover:border-neutral-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 dark:border-neutral-800 dark:hover:border-neutral-600 dark:focus-visible:ring-neutral-100"
+              className="block w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100"
             >
               <div className="relative aspect-square bg-neutral-100 dark:bg-neutral-900">
                 <Image
                   src={item.image_url}
-                  alt={item.headline ?? item.brand ?? '업로드된 DA 레퍼런스'}
+                  alt={item.headline ?? item.brand ?? '레퍼런스 이미지'}
                   fill
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   className="object-contain"
@@ -37,7 +44,8 @@ export function ReferenceGrid({ items, onSelect }: Props) {
               </div>
               <div className="px-3 py-2">
                 <p className="truncate text-xs text-neutral-500 dark:text-neutral-400">
-                  {item.headline ?? new Date(item.created_at).toLocaleString('ko-KR')}
+                  {item.headline ??
+                    new Date(item.created_at).toLocaleString('ko-KR')}
                 </p>
                 <p
                   className={[
@@ -51,6 +59,15 @@ export function ReferenceGrid({ items, onSelect }: Props) {
                 </p>
               </div>
             </button>
+
+            {showTemplateAction && (
+              <Link
+                href={{ pathname: '/upload', query: { from: item.id } }}
+                className="block border-t border-neutral-200 px-3 py-2 text-center text-xs text-neutral-600 hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-neutral-900 dark:border-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-900 dark:focus-visible:ring-neutral-100"
+              >
+                이 스타일로 새로 시작
+              </Link>
+            )}
           </li>
         )
       })}

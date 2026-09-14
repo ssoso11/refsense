@@ -101,7 +101,11 @@ export default function SearchPage() {
             검색 결과가 없습니다
           </p>
         ) : (
-          <ReferenceGrid items={results} onSelect={(r) => setSelectedId(r.id)} />
+          <ReferenceGrid
+            items={results}
+            onSelect={(r) => setSelectedId(r.id)}
+            showTemplateAction
+          />
         )}
       </section>
 

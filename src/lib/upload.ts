@@ -131,3 +131,17 @@ export async function updateReference(
 
   return data as DesignReference
 }
+
+/** '이 스타일로 새로 시작' 의 원본 행을 가져옵니다. 없으면 null. */
+export async function fetchReferenceById(
+  id: string,
+): Promise<DesignReference | null> {
+  const { data, error } = await supabase
+    .from('design_references')
+    .select(SELECT_COLUMNS)
+    .eq('id', id)
+    .maybeSingle()
+
+  if (error) throw new Error(`원본 레퍼런스 조회 실패: ${error.message}`)
+  return (data as DesignReference | null) ?? null
+}

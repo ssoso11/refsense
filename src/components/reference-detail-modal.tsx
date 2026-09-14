@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import {
   COLOR_TONE_OPTIONS,
@@ -29,13 +30,24 @@ type Props = {
   reference: DesignReference
   onClose: () => void
   onSaved: (updated: DesignReference) => void
+  /**
+   * 폼 초기값 override. '이 스타일로 새로 시작' 으로 올린 행은 자기 값 대신
+   * 원본 레퍼런스에서 복사한 값으로 폼을 엽니다. 저장 전까지 DB 에는 아무것도
+   * 쓰이지 않습니다.
+   */
+  initialValues?: ReferenceFormValues
 }
 
-export function ReferenceDetailModal({ reference, onClose, onSaved }: Props) {
+export function ReferenceDetailModal({
+  reference,
+  onClose,
+  onSaved,
+  initialValues,
+}: Props) {
   // 폼 초기값은 마운트 시 한 번만 잡습니다. 다른 카드를 열면 호출부에서
   // key={reference.id} 로 리마운트되므로 effect 로 동기화할 필요가 없습니다.
-  const [values, setValues] = useState<ReferenceFormValues>(() =>
-    toFormValues(reference),
+  const [values, setValues] = useState<ReferenceFormValues>(
+    () => initialValues ?? toFormValues(reference),
   )
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -233,7 +245,13 @@ export function ReferenceDetailModal({ reference, onClose, onSaved }: Props) {
             </p>
           )}
 
-          <div className="mt-7 flex justify-end gap-2 border-t border-neutral-200 pt-5 dark:border-neutral-800">
+          <div className="mt-7 flex flex-wrap items-center justify-end gap-2 border-t border-neutral-200 pt-5 dark:border-neutral-800">
+            <Link
+              href={{ pathname: '/upload', query: { from: reference.id } }}
+              className="mr-auto rounded-md border border-neutral-300 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-900"
+            >
+              이 스타일로 새로 시작
+            </Link>
             <button
               type="button"
               onClick={onClose}
